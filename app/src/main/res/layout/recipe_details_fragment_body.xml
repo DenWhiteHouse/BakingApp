@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:padding="@dimen/minPadding">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/minHeight"
+        android:scrollbarStyle="insideInset"
+        android:clipToPadding="false"
+        android:scrollIndicators="top|bottom"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:isScrollContainer="false"
+        android:fillViewport="false">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/minHeight"
+            android:textSize="@dimen/minTextSize"
+            android:textColor="@android:color/black"
+            android:id="@+id/recipeDetailsText"
+            android:padding="@dimen/minPadding"
+            />
+    </ScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_margin="@dimen/minMargin"
+        android:id="@+id/recipeDetailRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

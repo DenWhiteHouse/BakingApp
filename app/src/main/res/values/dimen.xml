@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="minPadding">16dp</dimen>
+    <dimen name="minMargin">16dp</dimen>
+    <dimen name="minTextSize">16sp</dimen>
+    <dimen name="minHeight">100dp</dimen>
+    <dimen name="exoPlayerHeight">200dp</dimen>
+</resources>
