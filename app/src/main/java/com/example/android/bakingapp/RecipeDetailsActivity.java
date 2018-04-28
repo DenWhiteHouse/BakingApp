@@ -38,6 +38,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
 
             recipe = new ArrayList<>();
             recipe = selectedRecipeBundle.getParcelableArrayList(SELECTED_RECIPES);
+            recipe=recipe;
             recipeName = recipe.get(0).getName();
 
             final DetailsFragment fragment = new DetailsFragment();
@@ -47,15 +48,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
                     .replace(R.id.fragment_container, fragment).addToBackStack(STACK_RECIPE_DETAIL)
                     .commit();
 
-            if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
+           /* if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
 
                 final StepsFragment stepsFragment = new StepsFragment();
                 stepsFragment.setArguments(selectedRecipeBundle);
-              /*  fragmentManager.beginTransaction()
+               fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container2, stepsFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
                         .commit();
-               */
-            }
+            }*/
 
 
         } else {
@@ -81,17 +81,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
         stepBundle.putString("Title", recipeName);
         fragment.setArguments(stepBundle);
 
-        if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
-           /* fragmentManager.beginTransaction()
+        /*if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
+            fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container2, fragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
                     .commit();
-          */
-        } else {
+
+        } else { */
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
                     .commit();
-        }
-
+        //}
     }
 
     @Override
