@@ -14,6 +14,7 @@ import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.RecipeDetailsActivity;
 import com.example.android.bakingapp.data.Ingredient;
 import com.example.android.bakingapp.data.Recipe;
+import com.example.android.bakingapp.widget.WidgetIntent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,10 @@ public class DetailsFragment extends Fragment {
             textView.append(" "+ingredients.get(i).getQuantity().toString() );
             textView.append(" "+ingredients.get(i).getMeasure()+"\n");
 
-            //ADD THE CODE FOR THE WIDGET
+            //Making Ingridients for the Widget
+            recipeIngredientsForWidgets.add(ingredients.get(i).getIngredient() +"\n"
+                    + ingredients.get(i).getQuantity().toString()
+                    + ingredients.get(i).getMeasure()+"\n");
         }
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recipeDetailRecycler);
@@ -73,6 +77,8 @@ public class DetailsFragment extends Fragment {
         recyclerView.setAdapter(mRecipeDetailAdapter);
         mRecipeDetailAdapter.setRecipe(recipe, getContext());
 
+        //Intent into to the widget
+        WidgetIntent.startBakingService(getContext(),recipeIngredientsForWidgets);
         return rootView;
     }
 

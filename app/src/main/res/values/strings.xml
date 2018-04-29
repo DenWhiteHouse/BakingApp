@@ -5,4 +5,7 @@
 
     <string name="previous">Previous</string>
     <string name="next">Next</string>
+
+    <string name="IngridientsLabel">Ingridients</string>
+    <string name="WidgetBase">Open the app and select a Recipe </string>
 </resources>

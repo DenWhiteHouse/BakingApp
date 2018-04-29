@@ -13,4 +13,5 @@
     <dimen name="detailsCardText">50dp</dimen>
     <dimen name="detailsCardTextSize">16sp</dimen>
     <dimen name="cardMargins">8dp</dimen>
+    <dimen name="widgetSize">24dp</dimen>
 </resources>

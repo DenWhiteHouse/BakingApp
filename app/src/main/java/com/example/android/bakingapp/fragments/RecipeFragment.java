@@ -43,7 +43,7 @@ public class RecipeFragment extends Fragment {
         recyclerView = (RecyclerView) mainView.findViewById(R.id.recipeRecycler);
         final RecipeAdapter recipesAdapter = new RecipeAdapter((MainActivity) getActivity());
 
-        //Check if LandedView
+        //Check if LandView
         if (mainView.getTag() != null && mainView.getTag().equals("phone-land")) {
             GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 4);
             recyclerView.setLayoutManager(mLayoutManager);
