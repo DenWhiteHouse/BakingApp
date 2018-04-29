@@ -19,13 +19,11 @@ import com.example.android.bakingapp.data.RetroClient;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.android.bakingapp.MainActivity.ALL_RECIPES;
+import static com.example.android.bakingapp.MainActivity.FETCHEDRECIPES;
 
 /**
  * Created by casab on 27/04/2018.
@@ -33,7 +31,8 @@ import static com.example.android.bakingapp.MainActivity.ALL_RECIPES;
 
 public class RecipeFragment extends Fragment {
     //Constructor Empty
-    public RecipeFragment() {}
+    public RecipeFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class RecipeFragment extends Fragment {
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                 ArrayList<Recipe> recipes = response.body();
                 Bundle recipesBundle = new Bundle();
-                recipesBundle.putParcelableArrayList(ALL_RECIPES, recipes);
+                recipesBundle.putParcelableArrayList(FETCHEDRECIPES, recipes);
                 recipesAdapter.setRecipe(recipes, getContext());
                 //Setting the Adapter inside onResponde to avoid misAdapting due enqueu's delay
                 recyclerView.setAdapter(recipesAdapter);

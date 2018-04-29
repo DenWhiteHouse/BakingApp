@@ -12,15 +12,15 @@ import java.util.ArrayList;
 
 public class WidgetIntent extends IntentService {
 
-    public static String INGRIDIENTLIST ="INGRIDIENTLIST";
+    public static String INGRIDIENTLIST = "INGRIDIENTLIST";
 
     public WidgetIntent() {
         super("WidgetIntent");
     }
 
-    public static void startBakingService(Context context, ArrayList<String> fromActivityIngredientsList) {
+    public static void widgetIntent(Context context, ArrayList<String> ingridients) {
         Intent intent = new Intent(context, WidgetIntent.class);
-        intent.putExtra(INGRIDIENTLIST,fromActivityIngredientsList);
+        intent.putExtra(INGRIDIENTLIST, ingridients);
         context.startService(intent);
     }
 
@@ -28,15 +28,14 @@ public class WidgetIntent extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             ArrayList<String> fromActivityIngredientsList = intent.getExtras().getStringArrayList(INGRIDIENTLIST);
-            handleActionUpdateBakingWidgets(fromActivityIngredientsList);
-
+            updateWidgetIntent(fromActivityIngredientsList);
         }
     }
 
-    private void handleActionUpdateBakingWidgets(ArrayList<String> fromActivityIngredientsList) {
+    private void updateWidgetIntent(ArrayList<String> fromActivityIngredientsList) {
         Intent intent = new Intent("android.appwidget.action.APPWIDGET_UPDATE2");
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE2");
-        intent.putExtra(INGRIDIENTLIST,fromActivityIngredientsList);
+        intent.putExtra(INGRIDIENTLIST, fromActivityIngredientsList);
         sendBroadcast(intent);
     }
 }

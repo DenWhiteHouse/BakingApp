@@ -36,24 +36,20 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.Recycler
         Context context = viewGroup.getContext();
 
         int layoutIdForListItem = R.layout.details_card;
-
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(layoutIdForListItem, viewGroup, false);
 
         RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         holder.textRecyclerView.setText(stepList.get(position).getId() + ". " + stepList.get(position).getShortDescription());
-
     }
 
     @Override
     public int getItemCount() {
-
         return stepList != null ? stepList.size() : 0;
     }
 
@@ -63,12 +59,9 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.Recycler
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textRecyclerView;
-
         public RecyclerViewHolder(View itemView) {
             super(itemView);
-
             textRecyclerView = (TextView) itemView.findViewById(R.id.shortDescription);
-
             itemView.setOnClickListener(this);
         }
 
@@ -77,6 +70,5 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.Recycler
             int clickedPosition = getAdapterPosition();
             lOnClickListener.onListItemClick(stepList, clickedPosition, recipeName);
         }
-
     }
 }

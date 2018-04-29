@@ -11,8 +11,6 @@ import com.example.android.bakingapp.data.Recipe;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-
 
 /**
  * Created by casab on 27/04/2018.
@@ -63,6 +61,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textRecyclerView;
+
         public RecyclerViewHolder(View itemView) {
             //Setting the TextView
             super(itemView);
@@ -75,8 +74,5 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
             int clickedPosition = getAdapterPosition();
             lOnClickListener.onListItemClick(recipesList.get(clickedPosition));
         }
-
     }
-
-
 }

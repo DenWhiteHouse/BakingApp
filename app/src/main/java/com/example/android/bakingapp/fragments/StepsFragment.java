@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,14 +33,13 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.bakingapp.MainActivity.SELECTED_INDEX;
-import static com.example.android.bakingapp.MainActivity.SELECTED_RECIPES;
-import static com.example.android.bakingapp.MainActivity.SELECTED_STEPS;
+import static com.example.android.bakingapp.MainActivity.INDEX;
+import static com.example.android.bakingapp.MainActivity.RECIPE;
+import static com.example.android.bakingapp.MainActivity.STEP;
 
 /**
  * Created by casab on 27/04/2018.
@@ -54,68 +51,67 @@ public class StepsFragment extends Fragment {
     String recipeName;
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer player;
-    private BandwidthMeter bandwidthMeter;
+    private BandwidthMeter meter;
     private ArrayList<Step> steps = new ArrayList<>();
-    private int selectedIndex;
-    private android.os.Handler mainHandler;
+    private int index;
+    private android.os.Handler handler;
     private ListItemClickListener itemClickListener;
 
-    public StepsFragment() {}
+    public StepsFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TextView textView;
-        mainHandler = new Handler();
-        bandwidthMeter = new DefaultBandwidthMeter();
+        handler = new Handler();
+        meter = new DefaultBandwidthMeter();
         itemClickListener = (RecipeDetailsActivity) getActivity();
         recipe = new ArrayList<>();
 
         if (savedInstanceState != null) {
-            steps = savedInstanceState.getParcelableArrayList(SELECTED_STEPS);
-            selectedIndex = savedInstanceState.getInt(SELECTED_INDEX);
+            steps = savedInstanceState.getParcelableArrayList(STEP);
+            index = savedInstanceState.getInt(INDEX);
             recipeName = savedInstanceState.getString("Title");
         } else {
-            steps = getArguments().getParcelableArrayList(SELECTED_STEPS);
+            steps = getArguments().getParcelableArrayList(STEP);
             if (steps != null) {
-                steps = getArguments().getParcelableArrayList(SELECTED_STEPS);
-                selectedIndex = getArguments().getInt(SELECTED_INDEX);
+                steps = getArguments().getParcelableArrayList(STEP);
+                index = getArguments().getInt(INDEX);
                 recipeName = getArguments().getString("Title");
             } else {
-                recipe = getArguments().getParcelableArrayList(SELECTED_RECIPES);
+                recipe = getArguments().getParcelableArrayList(RECIPE);
                 steps = (ArrayList<Step>) recipe.get(0).getSteps();
-                selectedIndex = 0;
+                index = 0;
             }
         }
         //Set the Fragment layout
-        View rootView = inflater.inflate(R.layout.recipe_steps_fragment_body, container, false);
-        textView = (TextView) rootView.findViewById(R.id.recipeStepText);
-        textView.setText(steps.get(selectedIndex).getDescription());
+        View view = inflater.inflate(R.layout.recipe_steps_fragment_body, container, false);
+        textView = (TextView) view.findViewById(R.id.recipeStepText);
+        textView.setText(steps.get(index).getDescription());
         textView.setVisibility(View.VISIBLE);
         //Bind the Playerview
-        simpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
+        simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
 
-        String videoURL = steps.get(selectedIndex).getVideoURL();
-        String imageUrl = steps.get(selectedIndex).getThumbnailURL();
         // The JSON has mp4 files on ImageThumb so I'm actually checking both the fields
+        String videoURL = steps.get(index).getVideoURL();
+        String imageUrl = steps.get(index).getThumbnailURL();
 
-        if (rootView.findViewWithTag("sw600dp-port-recipe_step_detail") != null) {
+        if (view.findViewWithTag("sw600dp-port-recipe_step_detail") != null) {
             recipeName = ((RecipeDetailsActivity) getActivity()).recipeName;
             ((RecipeDetailsActivity) getActivity()).getSupportActionBar().setTitle(recipeName);
         }
 
 
-
         if (!videoURL.isEmpty() || !imageUrl.isEmpty()) {
             // Manage the fact the JSON has video in both the fields
-            if(videoURL.isEmpty()){
-                initializePlayer(Uri.parse(steps.get(selectedIndex).getThumbnailURL()));
-            }
-            else {
-                initializePlayer(Uri.parse(steps.get(selectedIndex).getVideoURL()));
+            if (videoURL.isEmpty()) {
+                initializePlayer(Uri.parse(steps.get(index).getThumbnailURL()));
+            } else {
+                initializePlayer(Uri.parse(steps.get(index).getVideoURL()));
             }
 
-            if (rootView.findViewWithTag("sw600dp-land-recipe_step_detail") != null) {
+            if (view.findViewWithTag("sw600dp-land-recipe_step_detail") != null) {
                 //getActivity().findViewById(R.id.fragment_container2).setLayoutParams(new LinearLayout.LayoutParams(-1,-2));
                 simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
             } else if (isInLandscapeMode(getContext())) {
@@ -124,22 +120,21 @@ public class StepsFragment extends Fragment {
             }
         } else {
             player = null;
-            //  simpleExoPlayerView.setForeground(ContextCompat.getDrawable(getContext(), R.drawable.ic_visibility_off_white_36dp));
             // make invisbile the Player if there isn't any content to show
             simpleExoPlayerView.setVisibility(View.GONE);
         }
 
         //Binding the botton to move towards the steps
-        Button mPrevStep = (Button) rootView.findViewById(R.id.previousStep);
-        Button mNextstep = (Button) rootView.findViewById(R.id.nextStep);
+        Button mPrevStep = (Button) view.findViewById(R.id.previousStep);
+        Button mNextstep = (Button) view.findViewById(R.id.nextStep);
 
         mPrevStep.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (steps.get(selectedIndex).getId() > 0) {
+                if (steps.get(index).getId() > 0) {
                     if (player != null) {
                         player.stop();
                     }
-                    itemClickListener.onListItemClick(steps, steps.get(selectedIndex).getId() - 1, recipeName);
+                    itemClickListener.onListItemClick(steps, steps.get(index).getId() - 1, recipeName);
                 } else {
                     Toast.makeText(getActivity(), "This is the first step", Toast.LENGTH_SHORT).show();
                 }
@@ -148,25 +143,25 @@ public class StepsFragment extends Fragment {
 
         mNextstep.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
                 int lastIndex = steps.size() - 1;
-                if (steps.get(selectedIndex).getId() < steps.get(lastIndex).getId()) {
+                if (steps.get(index).getId() < steps.get(lastIndex).getId()) {
                     if (player != null) {
                         player.stop();
                     }
-                    itemClickListener.onListItemClick(steps, steps.get(selectedIndex).getId() + 1, recipeName);
+                    itemClickListener.onListItemClick(steps, steps.get(index).getId() + 1, recipeName);
                 } else {
                     Toast.makeText(getContext(), "This was the last step of the recipe", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        return rootView;
+        return view;
     }
 
+    //Rubric asks to use ExoPlayer, below the needed code to be using it
     private void initializePlayer(Uri mediaUri) {
         if (player == null) {
-            TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
-            DefaultTrackSelector trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
+            TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(meter);
+            DefaultTrackSelector trackSelector = new DefaultTrackSelector(handler, videoTrackSelectionFactory);
             LoadControl loadControl = new DefaultLoadControl();
 
             player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
@@ -182,12 +177,13 @@ public class StepsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle currentState) {
         super.onSaveInstanceState(currentState);
-        currentState.putParcelableArrayList(SELECTED_STEPS, steps);
-        currentState.putInt(SELECTED_INDEX, selectedIndex);
+        currentState.putParcelableArrayList(STEP, steps);
+        currentState.putInt(INDEX, index);
         currentState.putString("Title", recipeName);
     }
 
     public boolean isInLandscapeMode(Context context) {
+        //metod to check if the device is in landscape as the rubric asks to manage the view differenlty
         return (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 

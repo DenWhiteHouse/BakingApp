@@ -19,7 +19,7 @@ import com.example.android.bakingapp.widget.WidgetIntent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.bakingapp.MainActivity.SELECTED_RECIPES;
+import static com.example.android.bakingapp.MainActivity.RECIPE;
 
 /**
  * Created by casab on 27/04/2018.
@@ -41,10 +41,10 @@ public class DetailsFragment extends Fragment {
 
         //CHECK IF THERE IS A SAVED INSTANCE
         if (savedInstanceState != null) {
-            recipe = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
+            recipe = savedInstanceState.getParcelableArrayList(RECIPE);
 
         } else {
-            recipe = getArguments().getParcelableArrayList(SELECTED_RECIPES);
+            recipe = getArguments().getParcelableArrayList(RECIPE);
         }
 
         //Get the ingridients of the Recipe
@@ -58,15 +58,15 @@ public class DetailsFragment extends Fragment {
         ArrayList<String> recipeIngredientsForWidgets = new ArrayList<>();
 
         // Making the text for the scrollView of the Ingridients
-        for(int i=0;i<ingredients.size();i++){
+        for (int i = 0; i < ingredients.size(); i++) {
             textView.append(ingredients.get(i).getIngredient());
-            textView.append(" "+ingredients.get(i).getQuantity().toString() );
-            textView.append(" "+ingredients.get(i).getMeasure()+"\n");
+            textView.append(" " + ingredients.get(i).getQuantity().toString());
+            textView.append(" " + ingredients.get(i).getMeasure() + "\n");
 
             //Making Ingridients for the Widget
-            recipeIngredientsForWidgets.add(ingredients.get(i).getIngredient() +"\n"
-                    + ingredients.get(i).getQuantity().toString()
-                    + ingredients.get(i).getMeasure()+"\n");
+            recipeIngredientsForWidgets.add(ingredients.get(i).getIngredient() + " "
+                    + ingredients.get(i).getQuantity().toString() + " "
+                    + ingredients.get(i).getMeasure());
         }
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recipeDetailRecycler);
@@ -78,14 +78,14 @@ public class DetailsFragment extends Fragment {
         mRecipeDetailAdapter.setRecipe(recipe, getContext());
 
         //Intent into to the widget
-        WidgetIntent.startBakingService(getContext(),recipeIngredientsForWidgets);
+        WidgetIntent.widgetIntent(getContext(), recipeIngredientsForWidgets);
         return rootView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle currentState) {
         super.onSaveInstanceState(currentState);
-        currentState.putParcelableArrayList(SELECTED_RECIPES, recipe);
+        currentState.putParcelableArrayList(RECIPE, recipe);
         currentState.putString("Title", recipeName);
     }
 }

@@ -4,15 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-
 import com.example.android.bakingapp.R;
-
 import java.util.List;
-
-// Intent Statics declared for Widget
 import static com.example.android.bakingapp.widget.WidgetProvider.ingredientsList;
-import static com.example.android.bakingapp.widget.WidgetProvider.REMOTEVIEW_BUNDLE;
-import static com.example.android.bakingapp.widget.WidgetProvider.REMOTEVIEW_INGREDIENT_LIST;
 
 
 /**
@@ -20,45 +14,40 @@ import static com.example.android.bakingapp.widget.WidgetProvider.REMOTEVIEW_ING
  */
 
 public class WidgetAdapter extends RemoteViewsService {
-    List<String> remoteViewingredientsList;
+    List<String> widgetIngridientsList;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new GridRemoteViewsFactory(this.getApplicationContext(),intent);
-    }
+        return new GridRemoteViewsFactory(this.getApplicationContext(), intent); }
 
     class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         //For the Remote view built as GridView
         Context mContext = null;
-        public GridRemoteViewsFactory(Context context,Intent intent) {
+        public GridRemoteViewsFactory(Context context, Intent intent) {
             mContext = context;
-
         }
 
         @Override
-        public void onCreate() {
-        }
+        public void onCreate() {}
 
         @Override
         public void onDataSetChanged() {
-            remoteViewingredientsList = ingredientsList;
+            widgetIngridientsList = ingredientsList;
         }
 
         @Override
-        public void onDestroy() {
-
-        }
+        public void onDestroy() {}
 
         @Override
         public int getCount() {
-            return remoteViewingredientsList.size();
+            return widgetIngridientsList.size();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
             //Filling the remote view
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
-            views.setTextViewText(R.id.widget_textView, remoteViewingredientsList.get(position));
+            views.setTextViewText(R.id.widget_textView, widgetIngridientsList.get(position));
             Intent fillInIntent = new Intent();
             views.setOnClickFillInIntent(R.id.widget_textView, fillInIntent);
             return views;

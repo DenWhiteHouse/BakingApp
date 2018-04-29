@@ -12,48 +12,46 @@ import com.example.android.bakingapp.fragments.StepsFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.bakingapp.MainActivity.RECIPE;
+import static com.example.android.bakingapp.MainActivity.STEP;
+import static com.example.android.bakingapp.MainActivity.INDEX;
+
 /**
  * Created by casab on 27/04/2018.
  */
 
 public class RecipeDetailsActivity extends AppCompatActivity implements DetailsAdapter.ListItemClickListener, StepsFragment.ListItemClickListener {
 
-    static String ALL_RECIPES = "All_Recipes";
-    static String SELECTED_RECIPES = "Selected_Recipes";
-    static String SELECTED_STEPS = "Selected_Steps";
-    static String SELECTED_INDEX = "Selected_Index";
-    static String STACK_RECIPE_DETAIL = "STACK_RECIPE_DETAIL";
-    static String STACK_RECIPE_STEP_DETAIL = "STACK_RECIPE_STEP_DETAIL";
+    static String RECIPE_DETAIL = "RECIPE_DETAIL";
+    static String RECIPE_STEPS = "RECIPE_STEPS";
     public String recipeName;
     private ArrayList<Recipe> recipe;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_details);
-
+        // Check a paused Activity
         if (savedInstanceState == null) {
-
-            Bundle selectedRecipeBundle = getIntent().getExtras();
-
+            Bundle recipeBundle = getIntent().getExtras();
             recipe = new ArrayList<>();
-            recipe = selectedRecipeBundle.getParcelableArrayList(SELECTED_RECIPES);
-            recipe=recipe;
+            recipe = recipeBundle.getParcelableArrayList(RECIPE);
             recipeName = recipe.get(0).getName();
+            this.getSupportActionBar().setTitle(recipeName);
 
+            //Inflate the Fragments with the JSON data
             final DetailsFragment fragment = new DetailsFragment();
-            fragment.setArguments(selectedRecipeBundle);
+            fragment.setArguments(recipeBundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment).addToBackStack(STACK_RECIPE_DETAIL)
+                    .replace(R.id.fragment_container, fragment).addToBackStack(RECIPE_DETAIL)
                     .commit();
 
            /* if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
 
                 final StepsFragment stepsFragment = new StepsFragment();
-                stepsFragment.setArguments(selectedRecipeBundle);
+                stepsFragment.setArguments(recipeBundle);
                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container2, stepsFragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
+                        .replace(R.id.fragment_container2, stepsFragment).addToBackStack(RECIPE_STEPS)
                         .commit();
             }*/
 
@@ -76,20 +74,20 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
         getSupportActionBar().setTitle(recipeName);
 
         Bundle stepBundle = new Bundle();
-        stepBundle.putParcelableArrayList(SELECTED_STEPS, (ArrayList<Step>) stepsOut);
-        stepBundle.putInt(SELECTED_INDEX, selectedItemIndex);
+        stepBundle.putParcelableArrayList(STEP, (ArrayList<Step>) stepsOut);
+        stepBundle.putInt(INDEX, selectedItemIndex);
         stepBundle.putString("Title", recipeName);
         fragment.setArguments(stepBundle);
 
         /*if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container2, fragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
+                    .replace(R.id.fragment_container2, fragment).addToBackStack(RECIPE_STEPS)
                     .commit();
 
         } else { */
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
-                    .commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment).addToBackStack(RECIPE_STEPS)
+                .commit();
         //}
     }
 
@@ -99,5 +97,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
         outState.putString("Title", recipeName);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        // tell the BackPresse to go to main again after Details Fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 1) {
+            //go to Details Screen
+            fragmentManager.popBackStack(RECIPE_DETAIL, 0);
+        } else {
+            //go to Main Activity by finishing the Fragments Management
+            finish();
+        }
+    }
 }
