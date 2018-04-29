@@ -2,7 +2,15 @@
 <resources>
     <dimen name="minPadding">16dp</dimen>
     <dimen name="minMargin">16dp</dimen>
+    <dimen name="minTextSizeLabels">24sp</dimen>
     <dimen name="minTextSize">16sp</dimen>
+    <dimen name="recipeTextSize">32sp</dimen>
     <dimen name="minHeight">100dp</dimen>
+    <dimen name="IngreientsHeight">150dp</dimen>
     <dimen name="exoPlayerHeight">200dp</dimen>
+    <dimen name="detailsCard">250dp</dimen>
+    <dimen name="recipeItem">50dp</dimen>
+    <dimen name="detailsCardText">50dp</dimen>
+    <dimen name="detailsCardTextSize">16sp</dimen>
+    <dimen name="cardMargins">8dp</dimen>
 </resources>

@@ -60,25 +60,20 @@ public class StepsFragment extends Fragment {
     private android.os.Handler mainHandler;
     private ListItemClickListener itemClickListener;
 
-    public StepsFragment() {
-    }
+    public StepsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TextView textView;
         mainHandler = new Handler();
         bandwidthMeter = new DefaultBandwidthMeter();
-
         itemClickListener = (RecipeDetailsActivity) getActivity();
-
         recipe = new ArrayList<>();
 
         if (savedInstanceState != null) {
             steps = savedInstanceState.getParcelableArrayList(SELECTED_STEPS);
             selectedIndex = savedInstanceState.getInt(SELECTED_INDEX);
             recipeName = savedInstanceState.getString("Title");
-
-
         } else {
             steps = getArguments().getParcelableArrayList(SELECTED_STEPS);
             if (steps != null) {
@@ -90,50 +85,51 @@ public class StepsFragment extends Fragment {
                 steps = (ArrayList<Step>) recipe.get(0).getSteps();
                 selectedIndex = 0;
             }
-
         }
-
-
+        //Set the Fragment layout
         View rootView = inflater.inflate(R.layout.recipe_steps_fragment_body, container, false);
         textView = (TextView) rootView.findViewById(R.id.recipeStepText);
         textView.setText(steps.get(selectedIndex).getDescription());
         textView.setVisibility(View.VISIBLE);
-
+        //Bind the Playerview
         simpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
 
         String videoURL = steps.get(selectedIndex).getVideoURL();
+        String imageUrl = steps.get(selectedIndex).getThumbnailURL();
+        // The JSON has mp4 files on ImageThumb so I'm actually checking both the fields
 
         if (rootView.findViewWithTag("sw600dp-port-recipe_step_detail") != null) {
             recipeName = ((RecipeDetailsActivity) getActivity()).recipeName;
             ((RecipeDetailsActivity) getActivity()).getSupportActionBar().setTitle(recipeName);
         }
 
-        String imageUrl = steps.get(selectedIndex).getThumbnailURL();
-        if (imageUrl != "") {
-            Uri builtUri = Uri.parse(imageUrl).buildUpon().build();
-            ImageView thumbImage = (ImageView) rootView.findViewById(R.id.previewImage);
-            Picasso.with(getContext()).load(builtUri).into(thumbImage);
-        }
-
-        if (!videoURL.isEmpty()) {
 
 
-            initializePlayer(Uri.parse(steps.get(selectedIndex).getVideoURL()));
+        if (!videoURL.isEmpty() || !imageUrl.isEmpty()) {
+            // Manage the fact the JSON has video in both the fields
+            if(videoURL.isEmpty()){
+                initializePlayer(Uri.parse(steps.get(selectedIndex).getThumbnailURL()));
+            }
+            else {
+                initializePlayer(Uri.parse(steps.get(selectedIndex).getVideoURL()));
+            }
 
             if (rootView.findViewWithTag("sw600dp-land-recipe_step_detail") != null) {
                 //getActivity().findViewById(R.id.fragment_container2).setLayoutParams(new LinearLayout.LayoutParams(-1,-2));
                 simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
             } else if (isInLandscapeMode(getContext())) {
+                //make the video take the whoile card
                 textView.setVisibility(View.GONE);
             }
         } else {
             player = null;
             //  simpleExoPlayerView.setForeground(ContextCompat.getDrawable(getContext(), R.drawable.ic_visibility_off_white_36dp));
-            simpleExoPlayerView.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
+            // make invisbile the Player if there isn't any content to show
+            simpleExoPlayerView.setVisibility(View.GONE);
         }
 
-
+        //Binding the botton to move towards the steps
         Button mPrevStep = (Button) rootView.findViewById(R.id.previousStep);
         Button mNextstep = (Button) rootView.findViewById(R.id.nextStep);
 
@@ -145,8 +141,7 @@ public class StepsFragment extends Fragment {
                     }
                     itemClickListener.onListItemClick(steps, steps.get(selectedIndex).getId() - 1, recipeName);
                 } else {
-                    Toast.makeText(getActivity(), "You already are in the First step of the recipe", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getActivity(), "This is the first step", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -161,13 +156,10 @@ public class StepsFragment extends Fragment {
                     }
                     itemClickListener.onListItemClick(steps, steps.get(selectedIndex).getId() + 1, recipeName);
                 } else {
-                    Toast.makeText(getContext(), "You already are in the Last step of the recipe", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getContext(), "This was the last step of the recipe", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
         return rootView;
     }
 
@@ -239,5 +231,4 @@ public class StepsFragment extends Fragment {
     public interface ListItemClickListener {
         void onListItemClick(List<Step> allSteps, int Index, String recipeName);
     }
-
 }

@@ -3,18 +3,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:padding="@dimen/minPadding">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ingridients"
+        android:textAlignment="center"
+        android:textSize="@dimen/minTextSizeLabels"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/minHeight"
-        android:scrollbarStyle="insideInset"
-        android:clipToPadding="false"
+        android:layout_height="@dimen/IngreientsHeight"
         android:scrollIndicators="top|bottom"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
         android:isScrollContainer="false"
         android:fillViewport="false">
 
@@ -27,6 +31,14 @@
             android:padding="@dimen/minPadding"
             />
     </ScrollView>
+
+    <TextView
+        android:paddingTop="@dimen/minPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/steps"
+        android:textAlignment="center"
+        android:textSize="@dimen/minTextSizeLabels"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_margin="@dimen/minMargin"

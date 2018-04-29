@@ -38,7 +38,7 @@ public class DetailsFragment extends Fragment {
 
         recipe = new ArrayList<>();
 
-
+        //CHECK IF THERE IS A SAVED INSTANCE
         if (savedInstanceState != null) {
             recipe = savedInstanceState.getParcelableArrayList(SELECTED_RECIPES);
 
@@ -46,13 +46,24 @@ public class DetailsFragment extends Fragment {
             recipe = getArguments().getParcelableArrayList(SELECTED_RECIPES);
         }
 
+        //Get the ingridients of the Recipe
         List<Ingredient> ingredients = recipe.get(0).getIngredients();
         recipeName = recipe.get(0).getName();
 
+        //Binding the view and the Text to fill with the ingredients
         View rootView = inflater.inflate(R.layout.recipe_details_fragment_body, container, false);
         textView = (TextView) rootView.findViewById(R.id.recipeDetailsText);
 
         ArrayList<String> recipeIngredientsForWidgets = new ArrayList<>();
+
+        // Making the text for the scrollView of the Ingridients
+        for(int i=0;i<ingredients.size();i++){
+            textView.append(ingredients.get(i).getIngredient());
+            textView.append(" "+ingredients.get(i).getQuantity().toString() );
+            textView.append(" "+ingredients.get(i).getMeasure()+"\n");
+
+            //ADD THE CODE FOR THE WIDGET
+        }
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recipeDetailRecycler);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
