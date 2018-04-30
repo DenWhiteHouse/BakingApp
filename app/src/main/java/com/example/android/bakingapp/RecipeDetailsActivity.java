@@ -46,21 +46,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
                     .replace(R.id.fragment_container, fragment).addToBackStack(RECIPE_DETAIL)
                     .commit();
 
-           /* if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
 
+            //Check if the Device is a tablet and in case add a second fragment with the steps
+           if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet")) {
                 final StepsFragment stepsFragment = new StepsFragment();
                 stepsFragment.setArguments(recipeBundle);
                fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container2, stepsFragment).addToBackStack(RECIPE_STEPS)
                         .commit();
-            }*/
-
-
+            }
         } else {
             recipeName = savedInstanceState.getString("Title");
         }
-
-
     }
 
 
@@ -79,16 +76,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
         stepBundle.putString("Title", recipeName);
         fragment.setArguments(stepBundle);
 
-        /*if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet-land")) {
+        // in case fo table manages also the steps fragment
+        if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet")) {
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container2, fragment).addToBackStack(RECIPE_STEPS)
                     .commit();
-
-        } else { */
+        } else {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment).addToBackStack(RECIPE_STEPS)
                 .commit();
-        //}
+        }
     }
 
     @Override

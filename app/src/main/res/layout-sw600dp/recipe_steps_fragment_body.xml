@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@color/colorAccent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/minMargin" />
 
     <TextView
@@ -29,24 +28,20 @@
 
         <Button
             android:id="@+id/previousStep"
-            android:padding="10dp"
+            android:padding="2dp"
             android:textColor="@color/colorPrimary"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/previous"
+            android:text="p"
             />
 
         <Button
             android:id="@+id/nextStep"
             android:textColor="@color/colorPrimary"
-            android:padding="10dp"
-            android:layout_margin="10dp"
-            android:layout_width="100dp"
-            android:text="@string/next"
+            android:padding="2dp"
+            android:layout_width="wrap_content"
+            android:text="n"
             android:layout_height="wrap_content"
             />
     </LinearLayout>
-
-
 </LinearLayout>

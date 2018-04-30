@@ -41,15 +41,10 @@ public class RecipeFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.recipe_fragment_body, container, false);
         recyclerView = (RecyclerView) mainView.findViewById(R.id.recipeRecycler);
         final RecipeAdapter recipesAdapter = new RecipeAdapter((MainActivity) getActivity());
+        //LayoutManager
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
 
-        //Check if LandView
-        if (mainView.getTag() != null && mainView.getTag().equals("phone-land")) {
-            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 4);
-            recyclerView.setLayoutManager(mLayoutManager);
-        } else {
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(mLayoutManager);
-        }
 
         //Getting the JSON Object with Retrofit
         RecipesInterface RecipeInt = RetroClient.getRetrofitInstance();

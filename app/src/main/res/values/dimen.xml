@@ -14,4 +14,6 @@
     <dimen name="detailsCardTextSize">16sp</dimen>
     <dimen name="cardMargins">8dp</dimen>
     <dimen name="widgetSize">24dp</dimen>
+
+    <dimen name="tabletFrame">250dp</dimen>
 </resources>
