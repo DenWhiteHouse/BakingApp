@@ -3,11 +3,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <GridView
         android:id="@+id/widget_gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="1"
         android:columnWidth="@dimen/widgetSize"
-        />
+        android:numColumns="1" />
 </FrameLayout>

@@ -16,36 +16,34 @@
         android:layout_margin="@dimen/minMargin" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:textColor="@android:color/black"
         android:id="@+id/recipeStepText"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/previousStep"
-            android:padding="10dp"
-            android:textColor="@color/colorPrimary"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:padding="10dp"
             android:text="@string/previous"
-            />
+            android:textColor="@color/colorPrimary" />
 
         <Button
             android:id="@+id/nextStep"
-            android:textColor="@color/colorPrimary"
-            android:padding="10dp"
-            android:layout_margin="10dp"
             android:layout_width="100dp"
-            android:text="@string/next"
             android:layout_height="wrap_content"
-            />
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="@string/next"
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 
 

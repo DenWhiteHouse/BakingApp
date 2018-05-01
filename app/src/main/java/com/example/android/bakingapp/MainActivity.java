@@ -2,14 +2,16 @@ package com.example.android.bakingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.bakingapp.data.Recipe;
+import com.example.android.bakingapp.espresso.SimpleIdlingResource;
 
 import java.util.ArrayList;
-
-import static com.example.android.bakingapp.RecipeDetailsActivity.RECIPE_DETAIL;
 
 
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.ListItemClickListener {
@@ -20,10 +22,25 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Lis
     public static String STEP = "STEP";
     public static String INDEX = "INDEX";
 
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    //IdleResource for Testing JSON received with Retrofit (So not in Sync) so to move forward is needed and Idling Resource
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // get and istance of Idling Resource for testing
+        getIdlingResource();
     }
 
     @Override

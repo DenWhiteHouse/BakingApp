@@ -1,55 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorAccent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:padding="@dimen/minPadding">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ingridients"
-        android:textAlignment="center"
-        android:textSize="@dimen/minTextSizeLabels"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/IngreientsHeight"
-        android:scrollIndicators="top|bottom"
-        android:isScrollContainer="false"
-        android:fillViewport="false">
+        android:background="@color/colorAccent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:padding="@dimen/minPadding">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/minHeight"
-            android:textSize="@dimen/minTextSize"
-            android:textColor="@android:color/black"
-            android:id="@+id/recipeDetailsText"
-            android:padding="@dimen/minPadding"
-            />
-    </ScrollView>
+            android:layout_height="wrap_content"
+            android:text="@string/ingridients"
+            android:textAlignment="center"
+            android:textSize="@dimen/minTextSizeLabels" />
 
-    <TextView
-        android:paddingTop="@dimen/minPadding"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/steps"
-        android:textAlignment="center"
-        android:textSize="@dimen/minTextSizeLabels"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/IngreientsHeight"
+            android:fillViewport="false"
+            android:isScrollContainer="false"
+            android:scrollIndicators="top|bottom">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_margin="@dimen/minMargin"
-        android:id="@+id/recipeDetailRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-</LinearLayout>
+            <TextView
+                android:id="@+id/recipeDetailsText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/minHeight"
+                android:padding="@dimen/minPadding"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/minTextSize" />
+        </ScrollView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/minPadding"
+            android:text="@string/steps"
+            android:textAlignment="center"
+            android:textSize="@dimen/minTextSizeLabels" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recipeDetailRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/minMargin" />
+    </LinearLayout>
 </ScrollView>

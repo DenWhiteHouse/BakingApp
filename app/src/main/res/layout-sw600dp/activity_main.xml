@@ -8,8 +8,7 @@
     android:orientation="vertical"
     android:padding="@dimen/minPadding">
 
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recipe_fragment_body_part"
         android:name="com.example.android.bakingapp.fragments.RecipeFragment"
         android:layout_width="match_parent"

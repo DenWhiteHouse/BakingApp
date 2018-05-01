@@ -10,7 +10,6 @@
         android:id="@+id/widget_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/minTextSize"
         android:textColor="@android:color/black"
-        />
+        android:textSize="@dimen/minTextSize" />
 </LinearLayout>

@@ -87,8 +87,8 @@ public class StepsFragment extends Fragment {
         //Set the Fragment layout
         View view = inflater.inflate(R.layout.recipe_steps_fragment_body, container, false);
         textView = (TextView) view.findViewById(R.id.recipeStepText);
-       textView.setText(steps.get(index).getDescription());
-       textView.setVisibility(View.VISIBLE);
+        textView.setText(steps.get(index).getDescription());
+        textView.setVisibility(View.VISIBLE);
         //Bind the Playerview
         simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);

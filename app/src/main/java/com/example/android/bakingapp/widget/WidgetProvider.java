@@ -13,7 +13,6 @@ import com.example.android.bakingapp.RecipeDetailsActivity;
 
 import java.util.ArrayList;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
 import static com.example.android.bakingapp.widget.WidgetIntent.INGRIDIENTLIST;
 

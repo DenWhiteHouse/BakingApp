@@ -12,9 +12,9 @@ import com.example.android.bakingapp.fragments.StepsFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.bakingapp.MainActivity.INDEX;
 import static com.example.android.bakingapp.MainActivity.RECIPE;
 import static com.example.android.bakingapp.MainActivity.STEP;
-import static com.example.android.bakingapp.MainActivity.INDEX;
 
 /**
  * Created by casab on 27/04/2018.
@@ -48,10 +48,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
 
 
             //Check if the Device is a tablet and in case add a second fragment with the steps
-           if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet")) {
+            if (findViewById(R.id.recipe_linear_layout).getTag() != null && findViewById(R.id.recipe_linear_layout).getTag().equals("tablet")) {
                 final StepsFragment stepsFragment = new StepsFragment();
                 stepsFragment.setArguments(recipeBundle);
-               fragmentManager.beginTransaction()
+                fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container2, stepsFragment).addToBackStack(RECIPE_STEPS)
                         .commit();
             }
@@ -82,9 +82,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
                     .replace(R.id.fragment_container2, fragment).addToBackStack(RECIPE_STEPS)
                     .commit();
         } else {
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment).addToBackStack(RECIPE_STEPS)
-                .commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment).addToBackStack(RECIPE_STEPS)
+                    .commit();
         }
     }
 

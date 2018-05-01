@@ -59,6 +59,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.Recycler
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textRecyclerView;
+
         public RecyclerViewHolder(View itemView) {
             super(itemView);
             textRecyclerView = (TextView) itemView.findViewById(R.id.shortDescription);
