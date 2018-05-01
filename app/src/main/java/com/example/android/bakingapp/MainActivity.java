@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toolbar;
 
 import com.example.android.bakingapp.data.Recipe;
 import com.example.android.bakingapp.espresso.SimpleIdlingResource;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Lis
         setContentView(R.layout.activity_main);
         // get and istance of Idling Resource for testing
         getIdlingResource();
+
     }
 
     @Override

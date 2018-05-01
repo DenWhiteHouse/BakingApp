@@ -9,4 +9,11 @@
         android:id="@+id/recipeRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/thumbImage"
+        android:layout_gravity="center"
+        android:paddingRight="@dimen/minPadding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </FrameLayout>

@@ -3,6 +3,11 @@ package com.example.android.bakingapp;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.android.bakingapp.data.Recipe;
 import com.example.android.bakingapp.data.Step;
@@ -58,6 +63,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
         } else {
             recipeName = savedInstanceState.getString("Title");
         }
+
     }
 
 
@@ -105,5 +111,26 @@ public class RecipeDetailsActivity extends AppCompatActivity implements DetailsA
             //go to Main Activity by finishing the Fragments Management
             finish();
         }
+    }
+
+    //Adding the Actionbar as requested by the lst review
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.select_recipe:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

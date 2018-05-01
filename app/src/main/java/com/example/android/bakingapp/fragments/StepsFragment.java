@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +34,11 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 import static com.example.android.bakingapp.MainActivity.INDEX;
 import static com.example.android.bakingapp.MainActivity.RECIPE;
@@ -47,8 +50,14 @@ import static com.example.android.bakingapp.MainActivity.STEP;
 
 public class StepsFragment extends Fragment {
 
+    String SELECTED_POSITION = "playBackPosition";
+    private boolean playWhenReady;
+    private int currentWindow;
+    private long playBackPosition;
+
     ArrayList<Recipe> recipe;
     String recipeName;
+    private Uri mediaUri;
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer player;
     private BandwidthMeter meter;
@@ -67,11 +76,13 @@ public class StepsFragment extends Fragment {
         meter = new DefaultBandwidthMeter();
         itemClickListener = (RecipeDetailsActivity) getActivity();
         recipe = new ArrayList<>();
+        View view = inflater.inflate(R.layout.recipe_steps_fragment_body, container, false);
 
         if (savedInstanceState != null) {
             steps = savedInstanceState.getParcelableArrayList(STEP);
             index = savedInstanceState.getInt(INDEX);
             recipeName = savedInstanceState.getString("Title");
+            playBackPosition = savedInstanceState.getLong(SELECTED_POSITION);
         } else {
             steps = getArguments().getParcelableArrayList(STEP);
             if (steps != null) {
@@ -85,7 +96,6 @@ public class StepsFragment extends Fragment {
             }
         }
         //Set the Fragment layout
-        View view = inflater.inflate(R.layout.recipe_steps_fragment_body, container, false);
         textView = (TextView) view.findViewById(R.id.recipeStepText);
         textView.setText(steps.get(index).getDescription());
         textView.setVisibility(View.VISIBLE);
@@ -93,9 +103,21 @@ public class StepsFragment extends Fragment {
         simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.playerView);
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
 
-        // The JSON has mp4 files on ImageThumb so I'm actually checking both the fields
+        // taking the JSON's paths
         String videoURL = steps.get(index).getVideoURL();
         String imageUrl = steps.get(index).getThumbnailURL();
+        ImageView thumbImage = (ImageView) view.findViewById(R.id.thumbImage);
+
+        //Managin the Images
+        if (imageUrl!="") {
+            Uri builtUri = Uri.parse(imageUrl).buildUpon().build();
+            Picasso.with(getContext()).load(builtUri).into(thumbImage);
+        }
+        else{
+            thumbImage.setVisibility(View.GONE);
+        }
+
+        //Managin the videos
 
         if (view.findViewWithTag("sw600dp-port-recipe_step_detail") != null) {
             recipeName = ((RecipeDetailsActivity) getActivity()).recipeName;
@@ -103,14 +125,9 @@ public class StepsFragment extends Fragment {
         }
 
 
-        if (!videoURL.isEmpty() || !imageUrl.isEmpty()) {
-            // Manage the fact the JSON has video in both the fields
-            if (videoURL.isEmpty()) {
-                initializePlayer(Uri.parse(steps.get(index).getThumbnailURL()));
-            } else {
-                initializePlayer(Uri.parse(steps.get(index).getVideoURL()));
-            }
-
+        if (!videoURL.isEmpty()) {
+            initializePlayer(Uri.parse(steps.get(index).getVideoURL()));
+                initializePlayer(mediaUri);
             if (view.findViewWithTag("sw600dp-land-recipe_step_detail") != null) {
                 //getActivity().findViewById(R.id.fragment_container2).setLayoutParams(new LinearLayout.LayoutParams(-1,-2));
                 simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
@@ -170,7 +187,10 @@ public class StepsFragment extends Fragment {
             String userAgent = Util.getUserAgent(getContext(), "Baking App");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
-            player.setPlayWhenReady(true);
+            player.setPlayWhenReady(playWhenReady);
+        } else {
+            // In case of rotation continue from the stored playBackPosition
+            player.seekTo(currentWindow, playBackPosition);
         }
     }
 
@@ -180,6 +200,7 @@ public class StepsFragment extends Fragment {
         currentState.putParcelableArrayList(STEP, steps);
         currentState.putInt(INDEX, index);
         currentState.putString("Title", recipeName);
+        currentState.putLong(SELECTED_POSITION, playBackPosition);
     }
 
     public boolean isInLandscapeMode(Context context) {
@@ -188,39 +209,48 @@ public class StepsFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        if (player != null) {
-            player.stop();
-            player.release();
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer(mediaUri);
         }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (player != null) {
-            player.stop();
-            player.release();
-            player = null;
+    public void onResume() {
+        super.onResume();
+        // I guess the error was caused as I didn't add the = here on the condition
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            initializePlayer(mediaUri);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (player != null) {
-            player.stop();
+        if (Util.SDK_INT > 23) {
             player.release();
         }
     }
 
     @Override
     public void onPause() {
+        playBackPosition = player.getCurrentPosition();
         super.onPause();
-        if (player != null) {
-            player.stop();
+        //I've tried cutting the if as suggested but wasn't working, the provided code lab has more the equals
+        //so I've aded it in here
+        if (Util.SDK_INT < 23) {
             player.release();
+        }
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            playBackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
+            playWhenReady = player.getPlayWhenReady();
+            player.release();
+            player = null;
         }
     }
 
