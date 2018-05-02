@@ -1,13 +1,16 @@
 package com.example.android.bakingapp;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.data.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,6 +51,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         //setting the name got from the JSON by Retrofit
         holder.textRecyclerView.setText(recipesList.get(position).getName());
+        //managin the imageView
+        String imageUrl = recipesList.get(position).getImage();
+        if(!imageUrl.isEmpty()){
+            Uri builtUri = Uri.parse(imageUrl).buildUpon().build();
+            Picasso.with(mContext).load(builtUri).into(holder.recipeImage);
+        } else
+        {
+            holder.recipeImage.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -61,11 +73,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textRecyclerView;
+        ImageView recipeImage;
 
         public RecyclerViewHolder(View itemView) {
             //Setting the TextView
             super(itemView);
             textRecyclerView = (TextView) itemView.findViewById(R.id.title);
+            recipeImage=(ImageView) itemView.findViewById(R.id.recipeImage);
             itemView.setOnClickListener(this);
         }
 

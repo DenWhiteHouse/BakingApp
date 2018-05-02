@@ -43,6 +43,7 @@ import java.util.function.ToDoubleBiFunction;
 import static com.example.android.bakingapp.MainActivity.INDEX;
 import static com.example.android.bakingapp.MainActivity.RECIPE;
 import static com.example.android.bakingapp.MainActivity.STEP;
+import static java.lang.System.in;
 
 /**
  * Created by casab on 27/04/2018.
@@ -51,6 +52,7 @@ import static com.example.android.bakingapp.MainActivity.STEP;
 public class StepsFragment extends Fragment {
 
     String SELECTED_POSITION = "playBackPosition";
+    String PLAYWHENREADY = "playWhenReady";
     private boolean playWhenReady;
     private int currentWindow;
     private long playBackPosition;
@@ -83,6 +85,7 @@ public class StepsFragment extends Fragment {
             index = savedInstanceState.getInt(INDEX);
             recipeName = savedInstanceState.getString("Title");
             playBackPosition = savedInstanceState.getLong(SELECTED_POSITION);
+            playWhenReady=savedInstanceState.getBoolean(PLAYWHENREADY);
         } else {
             steps = getArguments().getParcelableArrayList(STEP);
             if (steps != null) {
@@ -109,7 +112,7 @@ public class StepsFragment extends Fragment {
         ImageView thumbImage = (ImageView) view.findViewById(R.id.thumbImage);
 
         //Managin the Images
-        if (imageUrl!="") {
+        if (!imageUrl.isEmpty()) {
             Uri builtUri = Uri.parse(imageUrl).buildUpon().build();
             Picasso.with(getContext()).load(builtUri).into(thumbImage);
         }
@@ -126,8 +129,8 @@ public class StepsFragment extends Fragment {
 
 
         if (!videoURL.isEmpty()) {
-            initializePlayer(Uri.parse(steps.get(index).getVideoURL()));
-                initializePlayer(mediaUri);
+            mediaUri = Uri.parse(steps.get(index).getVideoURL());
+            initializePlayer(mediaUri);
             if (view.findViewWithTag("sw600dp-land-recipe_step_detail") != null) {
                 //getActivity().findViewById(R.id.fragment_container2).setLayoutParams(new LinearLayout.LayoutParams(-1,-2));
                 simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
@@ -188,7 +191,8 @@ public class StepsFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
             player.setPlayWhenReady(playWhenReady);
-        } else {
+        }
+        if(playBackPosition != 0){
             // In case of rotation continue from the stored playBackPosition
             player.seekTo(currentWindow, playBackPosition);
         }
@@ -201,6 +205,7 @@ public class StepsFragment extends Fragment {
         currentState.putInt(INDEX, index);
         currentState.putString("Title", recipeName);
         currentState.putLong(SELECTED_POSITION, playBackPosition);
+        currentState.putBoolean(PLAYWHENREADY, playWhenReady);;
     }
 
     public boolean isInLandscapeMode(Context context) {
@@ -219,7 +224,6 @@ public class StepsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // I guess the error was caused as I didn't add the = here on the condition
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer(mediaUri);
         }
@@ -229,18 +233,17 @@ public class StepsFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) {
-            player.release();
+            releasePlayer();
         }
     }
 
     @Override
     public void onPause() {
         playBackPosition = player.getCurrentPosition();
+        playWhenReady = player.getPlayWhenReady();
         super.onPause();
-        //I've tried cutting the if as suggested but wasn't working, the provided code lab has more the equals
-        //so I've aded it in here
-        if (Util.SDK_INT < 23) {
-            player.release();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
         }
     }
 
